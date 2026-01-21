@@ -6,9 +6,13 @@ from modules.voters_functions import create_voter_group, create_scenario
 st.title("Simular Segunda Volta Eleitoral")
 
 st.sidebar.header("Parâmetros da Simulação")
-st.text("Ajuste os parâmetros abaixo para simular diferentes cenários eleitorais.")
+st.text("Ajuste os parâmetros abaixo para simular diferentes cenários eleitorais. Quando estiver pronto, pressione OK.")
 
-# Create voter groups
+# Initialize session state to track if we should run the simulation
+if "run_simulation" not in st.session_state:
+    st.session_state.run_simulation = False
+
+# Collect parameters
 voter_groups = create_voter_group(
     seguro_turnout=st.sidebar.slider(
         "Seguro - Probabilidade de Votação", 0.0, 1.0, 0.7
@@ -90,11 +94,23 @@ voter_groups = create_voter_group(
     ),
 )
 
-# Create scenario based on voter groups
-scenario_results = create_scenario(voter_groups)
+# Add OK button to trigger simulation
+if st.sidebar.button("OK", key="run_button"):
+    st.session_state.run_simulation = True
 
-st.header("Resultados da Simulação")
-st.subheader("Votos por Candidato")
-st.write(scenario_results.describe())
-st.subheader("Probabilidade de Ventura Vencer")
-st.write(f"{scenario_results["Ventura_Wins"].mean() * 100:.2f}%")
+# Only run simulation if OK button was pressed
+if st.session_state.run_simulation:
+    scenario_results = create_scenario(voter_groups)
+
+    st.header("Resultados da Simulação")
+
+    st.subheader("Probabilidade de Ventura Vencer")
+    st.write(f"{scenario_results["Ventura_Wins"].mean() * 100:.2f}%")
+    
+    st.subheader("Votos por Candidato")
+    st.write(scenario_results.describe())
+
+    st.session_state.run_simulation = False
+else:
+    st.info("Ajuste os parâmetros e pressione OK para executar a simulação.")
+
