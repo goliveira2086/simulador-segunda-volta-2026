@@ -7,3 +7,4 @@ openpyxl
 black
 black[jupyter]
 flake8
+streamlit
