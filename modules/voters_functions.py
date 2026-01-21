@@ -38,57 +38,57 @@ def create_voter_group(
 
     # Create dictionaries for each voter group
     eleitor_portugal_seguro = {
-        "first_turn_votes": 1738741,
+        "first_turn_votes": 1738741 + 16163,
         "probability_to_turnout": seguro_turnout,
         "probability_to_vote_for_candidate": seguro_vote_for_candidate,
     }
     eleitor_portugal_ventura = {
-        "first_turn_votes": 1297533,
+        "first_turn_votes": 1297533 + 29115,
         "probability_to_turnout": ventura_turnout,
         "probability_to_vote_for_candidate": ventura_vote_for_candidate,
     }
     eleitor_portugal_figueiredo = {
-        "first_turn_votes": 891788,
+        "first_turn_votes": 891788 + 10783,
         "probability_to_turnout": figueiredo_turnout,
         "probability_to_vote_for_candidate": figueiredo_vote_for_candidate,
     }
     eleitor_portugal_gouveia_melo = {
-        "first_turn_votes": 691489,
+        "first_turn_votes": 691489 + 3602,
         "probability_to_turnout": gouveia_melo_turnout,
         "probability_to_vote_for_candidate": gouveira_melo_vote_for_candidate,
     }
     eleitor_portugal_marques_mendes = {
-        "first_turn_votes": 631809,
+        "first_turn_votes": 631809 + 5585,
         "probability_to_turnout": marques_mendes_turnout,
         "probability_to_vote_for_candidate": marques_mendes_vote_for_candidate,
     }
     eleitor_portugal_martins = {
-        "first_turn_votes": 114468,
+        "first_turn_votes": 114468 + 1835,
         "probability_to_turnout": martins_turnout,
         "probability_to_vote_for_candidate": martins_vote_for_candidate,
     }
     eleitor_portugal_filipe = {
-        "first_turn_votes": 91889,
+        "first_turn_votes": 91889 + 700,
         "probability_to_turnout": filipe_turnout,
         "probability_to_vote_for_candidate": filipe_vote_for_candidate,
     }
     eleitor_portugal_vieira = {
-        "first_turn_votes": 60266,
+        "first_turn_votes": 60266 + 633,
         "probability_to_turnout": vieira_turnout,
         "probability_to_vote_for_candidate": vieira_vote_for_candidate,
     }
     eleitor_portugal_pinto = {
-        "first_turn_votes": 37671,
+        "first_turn_votes": 37671 + 865,
         "probability_to_turnout": pinto_vote_turnout,
         "probability_to_vote_for_candidate": pinto_vote_for_candidate,
     }
     eleitor_portugal_silva = {
-        "first_turn_votes": 10674,
+        "first_turn_votes": 10674 + 219,
         "probability_to_turnout": silva_turnout,
         "probability_to_vote_for_candidate": silva_vote_for_candidate,
     }
     eleitor_portugal_correia = {
-        "first_turn_votes": 4594,
+        "first_turn_votes": 4594 + 28,
         "probability_to_turnout": correia_turnout,
         "probability_to_vote_for_candidate": correia_vote_for_candidate,
     }
