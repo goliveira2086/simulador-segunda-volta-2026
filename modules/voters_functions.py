@@ -239,6 +239,7 @@ def create_scenario(
         results_scenario_df["Ventura"] - results_scenario_df["Seguro"]
     ) / (results_scenario_df["Ventura"] + results_scenario_df["Seguro"])
     id_flag = results_scenario_df["Diferença relativa"] <= max_difference
+    results_scenario_df = results_scenario_df.loc[id_flag, :].reset_index(drop=True)
 
     return results_scenario_df
 

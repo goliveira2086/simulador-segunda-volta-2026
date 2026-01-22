@@ -1,19 +1,12 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-from modules.voters_functions import (
-    create_voter_group,
-    create_scenario,
-    plot_scenario_correlation,
-    plot_scenario_distribution,
-)
+from modules.voters_functions import create_voter_group, create_scenario, plot_scenario_correlation, plot_scenario_distribution
 
 st.title("Simular Segunda Volta Eleitoral")
 
 st.sidebar.header("Parâmetros da Simulação")
-st.text(
-    "Ajuste os parâmetros abaixo para simular diferentes cenários eleitorais. Quando estiver pronto, pressione OK."
-)
+st.text("Ajuste os parâmetros abaixo para simular diferentes cenários eleitorais. Quando estiver pronto, pressione OK.")
 
 # Initialize session state to track if we should run the simulation
 if "run_simulation" not in st.session_state:
@@ -58,7 +51,7 @@ voter_groups = create_voter_group(
         "Martins - Probabilidade de Votar no Ventura (%)", 0, 100, 50
     ),
     filipe_turnout=st.sidebar.slider(
-        "Filipe - Probabilidade de Votação (%)", 0, 100, 50
+        "Filipe - Probabilidade de Votação (%)",  0, 100, 50
     ),
     filipe_vote_for_candidate=st.sidebar.slider(
         "Filipe - Probabilidade de Votar no Ventura (%)", 0, 100, 50
@@ -76,26 +69,31 @@ voter_groups = create_voter_group(
         "Pinto - Probabilidade de Votar no Ventura (%)", 0, 100, 50
     ),  # Adjusted to match the original value
     silva_turnout=st.sidebar.slider(
-        "Silva - Probabilidade de Votação (%)", 0, 100, 50
+        "Silva - Probabilidade de Votação (%)",  0, 100, 50
     ),  # Adjusted to match the original value
     silva_vote_for_candidate=st.sidebar.slider(
-        "Silva - Probabilidade de Votar no Ventura (%)", 0, 100, 50
+        "Silva - Probabilidade de Votar no Ventura (%)",  0, 100, 50
     ),  # Adjusted to match the original value
     correia_turnout=st.sidebar.slider(
-        "Correia - Probabilidade de Votação (%)", 0, 100, 50
+        "Correia - Probabilidade de Votação (%)",  0, 100, 50
     ),  # Adjusted to match the original value
     correia_vote_for_candidate=st.sidebar.slider(
-        "Correia - Probabilidade de Votar no Ventura (%)", 0, 100, 50
+        "Correia - Probabilidade de Votar no Ventura (%)",  0, 100, 50
     ),  # Adjusted to match the original value
     abstentionist_turnout=st.sidebar.slider(
-        "Abstenção - Probabilidade de Votação (%)", 0, 100, 50
+        "Abstenção - Probabilidade de Votação (%)",  0, 100, 50
     ),
     abstentionist_vote_for_candidate=st.sidebar.slider(
         "Abstenção - Probabilidade de Votar no Ventura (%)", 0, 100, 50
     ),
 )
 # Add maximum abstention selector
-max_abstention = st.sidebar.slider("Abstenção Máxima (%)", 0, 100, 30) / 100
+max_abstention = st.sidebar.slider(
+    "Abstenção Máxima (%)", 0, 100, 30
+) / 100
+max_difference = st.sidebar.slider(
+    "Diference Máxima Entre Candidatos (Pontos Percentuais)", 0, 100, 30
+) / 100
 
 # Add OK button to trigger simulation
 if st.sidebar.button("OK", key="run_button"):
@@ -103,20 +101,25 @@ if st.sidebar.button("OK", key="run_button"):
 
 # Only run simulation if OK button was pressed
 if st.session_state.run_simulation:
-    scenario_results = create_scenario(voter_groups, max_abstention=max_abstention)
-
+    scenario_results = create_scenario(
+        voter_groups,
+        max_abstention=max_abstention,
+        max_difference=max_difference,
+                                       )
+    
     st.header("Resultados da Simulação")
 
     st.subheader("Probabilidade de Ventura Vencer")
     st.write(f"{scenario_results["Ventura vence!"].mean() * 100:.2f}%")
-
+    
     st.subheader("Votos por Candidato")
     fig_1 = plot_scenario_distribution(scenario_results)
     st.pyplot(fig_1)
 
     fig_2 = plot_scenario_correlation(scenario_results)
     st.pyplot(fig_2)
-
+    
     st.session_state.run_simulation = False
 else:
     st.info("Ajuste os parâmetros e pressione OK para executar a simulação.")
+
