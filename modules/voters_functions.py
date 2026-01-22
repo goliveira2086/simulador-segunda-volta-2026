@@ -119,20 +119,21 @@ def create_voter_group(
 
     return voters_groups
 
+
 def calculate_alpha_with_fixed_beta(mean, beta=2):
     """
     Calculate alpha parameter of a beta distribution when beta is fixed at 2.
-    
+
     Parameters:
     mean (float): Mean of the beta distribution (between 0 and 1).
     beta (float): Fixed beta parameter (default is 2).
-    
+
     Returns:
     float: Alpha parameter for the beta distribution.
     """
     if mean <= 0 or mean >= 1:
         raise ValueError("Mean must be between 0 and 1")
-    
+
     # Beta distribution mean relationship:
     # mean = alpha / (alpha + beta)
     # Solving for alpha:
@@ -141,9 +142,9 @@ def calculate_alpha_with_fixed_beta(mean, beta=2):
     # mean * beta = alpha - mean * alpha
     # mean * beta = alpha * (1 - mean)
     # alpha = (mean * beta) / (1 - mean)
-    
+
     alpha = (mean * beta) / (1 - mean)
-    
+
     return alpha
 
 
@@ -162,16 +163,30 @@ def votes_from_one_group(
     int: Number of votes received by the candidate from this group.
     """
     # Simulate turnout
-    adjusted_probability_to_turnout = np.where(probability_to_turnout <= 0, 0.001, probability_to_turnout)
-    adjusted_probability_to_turnout = np.where(adjusted_probability_to_turnout >= 1, 0.999, adjusted_probability_to_turnout)
-    alpha = calculate_alpha_with_fixed_beta(mean=adjusted_probability_to_turnout, beta=2)
+    adjusted_probability_to_turnout = np.where(
+        probability_to_turnout <= 0, 0.001, probability_to_turnout
+    )
+    adjusted_probability_to_turnout = np.where(
+        adjusted_probability_to_turnout >= 1, 0.999, adjusted_probability_to_turnout
+    )
+    alpha = calculate_alpha_with_fixed_beta(
+        mean=adjusted_probability_to_turnout, beta=2
+    )
     actual_probability_to_turnout = np.random.beta(alpha, 2, size=1)[0]
     turnout = np.random.binomial(nbr_voters_first_turn, actual_probability_to_turnout)
 
     # Simulate votes for the candidate
-    adjusted_probability_to_vote_for_candidate = np.where(probability_to_vote_for_candidate <= 0, 0.001, probability_to_vote_for_candidate)
-    adjusted_probability_to_vote_for_candidate = np.where(adjusted_probability_to_vote_for_candidate >= 1, 0.999, adjusted_probability_to_vote_for_candidate)
-    alpha = calculate_alpha_with_fixed_beta(mean=adjusted_probability_to_vote_for_candidate, beta=2)
+    adjusted_probability_to_vote_for_candidate = np.where(
+        probability_to_vote_for_candidate <= 0, 0.001, probability_to_vote_for_candidate
+    )
+    adjusted_probability_to_vote_for_candidate = np.where(
+        adjusted_probability_to_vote_for_candidate >= 1,
+        0.999,
+        adjusted_probability_to_vote_for_candidate,
+    )
+    alpha = calculate_alpha_with_fixed_beta(
+        mean=adjusted_probability_to_vote_for_candidate, beta=2
+    )
     actual_probability_to_vote_for_candidate = np.random.beta(alpha, 2, size=1)[0]
     votes = np.random.binomial(turnout, actual_probability_to_vote_for_candidate)
 
@@ -188,8 +203,8 @@ def simulate_second_round(voter_groups, n_simulations=10000):
         for group in voter_groups:
             turnout, votes = votes_from_one_group(
                 group["first_turn_votes"],
-                group["probability_to_turnout"],
-                group["probability_to_vote_for_candidate"],
+                group["probability_to_turnout"] / 100,
+                group["probability_to_vote_for_candidate"] / 100,
             )
             total_votes_candidate_1 += votes
             total_votes_candidate_2 += turnout - votes
@@ -200,7 +215,9 @@ def simulate_second_round(voter_groups, n_simulations=10000):
     return results
 
 
-def create_scenario(voters_groups, n_simulations=10000):
+def create_scenario(
+    voters_groups, max_abstention=0.3, max_difference=0.1, n_simulations=10000
+):
     results_scenario = simulate_second_round(voters_groups, n_simulations=n_simulations)
     results_scenario_df = pd.DataFrame(
         results_scenario, columns=["Ventura", "Seguro", "Votantes"]
@@ -209,71 +226,87 @@ def create_scenario(voters_groups, n_simulations=10000):
         results_scenario_df["Ventura"] > results_scenario_df["Seguro"]
     )
 
+    # Apply maximum abstention filter
+    portugal_all_voters = 9262653 + 1754549
+    results_scenario_df["Abstenção"] = 1 - (
+        results_scenario_df["Votantes"] / portugal_all_voters
+    )
+    id_flag = results_scenario_df["Abstenção"] <= max_abstention
+    results_scenario_df = results_scenario_df.loc[id_flag, :].reset_index(drop=True)
+
+    # Maximum difference filter
+    results_scenario_df["Diferença relativa"] = abs(
+        results_scenario_df["Ventura"] - results_scenario_df["Seguro"]
+    ) / (results_scenario_df["Ventura"] + results_scenario_df["Seguro"])
+    id_flag = results_scenario_df["Diferença relativa"] <= max_difference
+
     return results_scenario_df
 
 
 def plot_scenario_distribution(scenario_results):
     """
     Create a KDE plot showing the distribution of votes for each candidate.
-    
+
     Parameters:
     scenario_results (pd.DataFrame): DataFrame with columns ['Ventura', 'Seguro', 'Turnout']
     """
     # Melt the first two columns (candidates) for the plot
-    melted_data = scenario_results[['Ventura', 'Seguro']].melt(
-        var_name='Candidato', 
-        value_name='Votos'
+    melted_data = scenario_results[["Ventura", "Seguro"]].melt(
+        var_name="Candidato", value_name="Votos"
     )
-    
+
     # Convert votes to millions
-    melted_data['Votos'] = melted_data['Votos'] / 1000000
-        
+    melted_data["Votos"] = melted_data["Votos"] / 1000000
+
     # Create the KDE plot
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.kdeplot(
         data=melted_data,
-        x='Votos',
-        hue='Candidato',
+        x="Votos",
+        hue="Candidato",
         fill=True,
         common_norm=False,
-        palette='Set2',
+        palette="Set2",
         ax=ax,
     )
-    
-    plt.title('Distribuição de Votos por Candidato')
-    plt.xlabel('Número de Votos (milhões)')
-    plt.ylabel('Densidade')
+
+    plt.title("Distribuição de Votos por Candidato")
+    plt.xlabel("Número de Votos (milhões)")
+    plt.ylabel("Densidade")
     plt.tight_layout()
-    
+
     return fig
+
 
 def plot_scenario_correlation(scenario_results):
     """
     Create a KDE plot showing the correlation between the votes of each candidate.
-    
+
     Parameters:
     scenario_results (pd.DataFrame): DataFrame with columns ['Ventura', 'Seguro', 'Turnout']
     """
     # Convert votes to millions
-    for col in ['Ventura', 'Seguro']:
+    for col in ["Ventura", "Seguro"]:
         scenario_results[col] = scenario_results[col] / 1000000
 
-    scenario_results['Quem vence?'] = scenario_results['Ventura vence!'].map({True: 'Ventura', False: 'Seguro'})
-        
+    scenario_results["Quem vence?"] = scenario_results["Ventura vence!"].map(
+        {True: "Ventura", False: "Seguro"}
+    )
+
     # Create the KDE plot
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.scatterplot(
         data=scenario_results,
-        x='Ventura',
-        y='Seguro',
+        x="Ventura",
+        y="Seguro",
         hue="Quem vence?",
-        palette='Set2',
+        palette="Set2",
         ax=ax,
     )
-    
-    plt.title('Correlação entre votos dos candidatos em cada simulação')
-    plt.xlabel('Número de votos em Ventura (milhões)')
-    plt.ylabel('Número de votos em Seguro (milhões)')
+
+    plt.title("Correlação entre votos dos candidatos em cada simulação")
+    plt.xlabel("Número de votos em Ventura (milhões)")
+    plt.ylabel("Número de votos em Seguro (milhões)")
     plt.tight_layout()
-    
+
     return fig
