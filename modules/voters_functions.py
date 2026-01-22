@@ -1,3 +1,4 @@
+from matplotlib.pylab import beta
 import numpy as np
 import pandas as pd
 
@@ -116,6 +117,34 @@ def create_voter_group(
 
     return voters_groups
 
+def calculate_beta_parameters(mean, std_dev):
+    """
+    Calculate alpha and beta parameters of a beta distribution from mean and standard deviation.
+    
+    Parameters:
+    mean (float): Mean of the beta distribution (between 0 and 1).
+    std_dev (float): Standard deviation of the beta distribution.
+    
+    Returns:
+    tuple: (alpha, beta) parameters for the beta distribution.
+    """
+    if mean <= 0 or mean >= 1:
+        raise ValueError("Mean must be between 0 and 1")
+    
+    # Variance from standard deviation
+    variance = std_dev ** 2
+    
+    # Beta distribution relationships:
+    # mean = alpha / (alpha + beta)
+    # variance = (alpha * beta) / ((alpha + beta)^2 * (alpha + beta + 1))
+    
+    # Solving for alpha and beta:
+    temp = (mean * (1 - mean) / variance) - 1
+    alpha = mean * temp
+    beta = (1 - mean) * temp
+    
+    return alpha, beta
+
 
 def votes_from_one_group(
     nbr_voters_first_turn, probability_to_turnout, probability_to_vote_for_candidate
@@ -132,10 +161,20 @@ def votes_from_one_group(
     int: Number of votes received by the candidate from this group.
     """
     # Simulate turnout
-    turnout = np.random.binomial(nbr_voters_first_turn, probability_to_turnout)
+    alpha, beta = calculate_beta_parameters(
+        mean=probability_to_turnout,
+        std_dev=probability_to_turnout * 0.1,
+        )
+    actual_probability_to_turnout = np.random.beta(alpha, beta, size=1)[0]
+    turnout = np.random.binomial(nbr_voters_first_turn, actual_probability_to_turnout)
 
     # Simulate votes for the candidate
-    votes = np.random.binomial(turnout, probability_to_vote_for_candidate)
+    alpha, beta = calculate_beta_parameters(
+        mean=probability_to_vote_for_candidate,
+        std_dev=probability_to_vote_for_candidate * 0.1,
+        )
+    actual_probability_to_vote_for_candidate = np.random.beta(alpha, beta, size=1)[0]
+    votes = np.random.binomial(turnout, actual_probability_to_vote_for_candidate)
 
     return turnout, votes
 
