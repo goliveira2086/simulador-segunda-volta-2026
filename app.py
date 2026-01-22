@@ -45,52 +45,46 @@ voter_groups = create_voter_group(
         "Marques Mendes - Probabilidade de Votar no Candidato", 0.0, 1.0, 0.5
     ),
     martins_turnout=st.sidebar.slider(
-        "Martins - Probabilidade de Votação", 0.25, 0.75, 0.4285714285714286
+        "Martins - Probabilidade de Votação", 0.0, 1.0, 0.5
     ),
     martins_vote_for_candidate=st.sidebar.slider(
-        "Martins - Probabilidade de Votar no Candidato", 0.25, 0.75, 0.4285714285714286
+        "Martins - Probabilidade de Votar no Candidato", 0.0, 1.0, 0.5
     ),
     filipe_turnout=st.sidebar.slider(
-        "Filipe - Probabilidade de Votação", 0.25, 0.75, 0.4285714285714286
+        "Filipe - Probabilidade de Votação",  0.0, 1.0, 0.5
     ),
     filipe_vote_for_candidate=st.sidebar.slider(
-        "Filipe - Probabilidade de Votar no Candidato", 0.25, 0.75, 0.4285714285714286
+        "Filipe - Probabilidade de Votar no Candidato", 0.0, 1.0, 0.5
     ),
     vieira_turnout=st.sidebar.slider(
-        "Vieira - Probabilidade de Votação", 0.25, 0.75, 0.4285714285714286
+        "Vieira - Probabilidade de Votação", 0.0, 1.0, 0.5
     ),
     vieira_vote_for_candidate=st.sidebar.slider(
-        "Vieira - Probabilidade de Votar no Candidato", 0.25, 0.75, 0.4285714285714286
+        "Vieira - Probabilidade de Votar no Candidato", 0.0, 1.0, 0.5
     ),
     pinto_vote_turnout=st.sidebar.slider(
-        "Pinto - Probabilidade de Votação",
-        0.3333333333333333,
-        0.6666666666666666,
-        0.4999999999999999,
+        "Pinto - Probabilidade de Votação", 0.0, 1.0, 0.5
     ),  # Adjusted to match the original value
     pinto_vote_for_candidate=st.sidebar.slider(
-        "Pinto - Probabilidade de Votar no Candidato",
-        0.333333333333333,
-        0.666666666,
-        0.49999999,
+        "Pinto - Probabilidade de Votar no Candidato", 0.0, 1.0, 0.5
     ),  # Adjusted to match the original value
     silva_turnout=st.sidebar.slider(
-        "Silva - Probabilidade de Votação", 0.2, 0.8, 0.4
+        "Silva - Probabilidade de Votação",  0.0, 1.0, 0.5
     ),  # Adjusted to match the original value
     silva_vote_for_candidate=st.sidebar.slider(
-        "Silva - Probabilidade de Votar no Candidato", 0.2, 0.8, 0.4
+        "Silva - Probabilidade de Votar no Candidato",  0.0, 1.0, 0.5
     ),  # Adjusted to match the original value
     correia_turnout=st.sidebar.slider(
-        "Correia - Probabilidade de Votação", 0.2, 0.8, 0.4
+        "Correia - Probabilidade de Votação",  0.0, 1.0, 0.5
     ),  # Adjusted to match the original value
     correia_vote_for_candidate=st.sidebar.slider(
-        "Correia - Probabilidade de Votar no Candidato", 0.2, 0.8, 0.4
+        "Correia - Probabilidade de Votar no Candidato",  0.0, 1.0, 0.5
     ),  # Adjusted to match the original value
     abstentionist_turnout=st.sidebar.slider(
-        "Abstenção - Probabilidade de Votação", 0.0, 1.0, 0.0
+        "Abstenção - Probabilidade de Votação",  0.0, 1.0, 0.5
     ),
     abstentionist_vote_for_candidate=st.sidebar.slider(
-        "Abstenção - Probabilidade de Votar no Candidato", 0.0, 1.0, 0.0
+        "Abstenção - Probabilidade de Votar no Candidato", 0.0, 1.0, 0.5
     ),
 )
 
