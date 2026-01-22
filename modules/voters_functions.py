@@ -161,17 +161,21 @@ def votes_from_one_group(
     int: Number of votes received by the candidate from this group.
     """
     # Simulate turnout
+    adjusted_probability_to_turnout = np.where(probability_to_turnout <= 0, 0.001, probability_to_turnout)
+    adjusted_probability_to_turnout = np.where(adjusted_probability_to_turnout >= 1, 0.999, adjusted_probability_to_turnout)
     alpha, beta = calculate_beta_parameters(
-        mean=probability_to_turnout,
-        std_dev=probability_to_turnout * 0.1,
+        mean=adjusted_probability_to_turnout,
+        std_dev=adjusted_probability_to_turnout * 0.1,
         )
     actual_probability_to_turnout = np.random.beta(alpha, beta, size=1)[0]
     turnout = np.random.binomial(nbr_voters_first_turn, actual_probability_to_turnout)
 
     # Simulate votes for the candidate
+    adjusted_probability_to_vote_for_candidate = np.where(probability_to_vote_for_candidate <= 0, 0.001, probability_to_vote_for_candidate)
+    adjusted_probability_to_vote_for_candidate = np.where(adjusted_probability_to_vote_for_candidate >= 1, 0.999, adjusted_probability_to_vote_for_candidate)
     alpha, beta = calculate_beta_parameters(
-        mean=probability_to_vote_for_candidate,
-        std_dev=probability_to_vote_for_candidate * 0.1,
+        mean=adjusted_probability_to_vote_for_candidate,
+        std_dev=adjusted_probability_to_vote_for_candidate * 0.1,
         )
     actual_probability_to_vote_for_candidate = np.random.beta(alpha, beta, size=1)[0]
     votes = np.random.binomial(turnout, actual_probability_to_vote_for_candidate)
