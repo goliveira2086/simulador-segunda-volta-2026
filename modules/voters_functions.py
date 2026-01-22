@@ -117,33 +117,32 @@ def create_voter_group(
 
     return voters_groups
 
-def calculate_beta_parameters(mean, std_dev):
+def calculate_alpha_with_fixed_beta(mean, beta=2):
     """
-    Calculate alpha and beta parameters of a beta distribution from mean and standard deviation.
+    Calculate alpha parameter of a beta distribution when beta is fixed at 2.
     
     Parameters:
     mean (float): Mean of the beta distribution (between 0 and 1).
-    std_dev (float): Standard deviation of the beta distribution.
+    beta (float): Fixed beta parameter (default is 2).
     
     Returns:
-    tuple: (alpha, beta) parameters for the beta distribution.
+    float: Alpha parameter for the beta distribution.
     """
     if mean <= 0 or mean >= 1:
         raise ValueError("Mean must be between 0 and 1")
     
-    # Variance from standard deviation
-    variance = std_dev ** 2
-    
-    # Beta distribution relationships:
+    # Beta distribution mean relationship:
     # mean = alpha / (alpha + beta)
-    # variance = (alpha * beta) / ((alpha + beta)^2 * (alpha + beta + 1))
+    # Solving for alpha:
+    # mean * (alpha + beta) = alpha
+    # mean * alpha + mean * beta = alpha
+    # mean * beta = alpha - mean * alpha
+    # mean * beta = alpha * (1 - mean)
+    # alpha = (mean * beta) / (1 - mean)
     
-    # Solving for alpha and beta:
-    temp = (mean * (1 - mean) / variance) - 1
-    alpha = mean * temp
-    beta = (1 - mean) * temp
+    alpha = (mean * beta) / (1 - mean)
     
-    return alpha, beta
+    return alpha
 
 
 def votes_from_one_group(
@@ -163,21 +162,15 @@ def votes_from_one_group(
     # Simulate turnout
     adjusted_probability_to_turnout = np.where(probability_to_turnout <= 0, 0.001, probability_to_turnout)
     adjusted_probability_to_turnout = np.where(adjusted_probability_to_turnout >= 1, 0.999, adjusted_probability_to_turnout)
-    alpha, beta = calculate_beta_parameters(
-        mean=adjusted_probability_to_turnout,
-        std_dev=adjusted_probability_to_turnout * 0.1,
-        )
-    actual_probability_to_turnout = np.random.beta(alpha, beta, size=1)[0]
+    alpha = calculate_alpha_with_fixed_beta(mean=adjusted_probability_to_turnout, beta=2)
+    actual_probability_to_turnout = np.random.beta(alpha, 2, size=1)[0]
     turnout = np.random.binomial(nbr_voters_first_turn, actual_probability_to_turnout)
 
     # Simulate votes for the candidate
     adjusted_probability_to_vote_for_candidate = np.where(probability_to_vote_for_candidate <= 0, 0.001, probability_to_vote_for_candidate)
     adjusted_probability_to_vote_for_candidate = np.where(adjusted_probability_to_vote_for_candidate >= 1, 0.999, adjusted_probability_to_vote_for_candidate)
-    alpha, beta = calculate_beta_parameters(
-        mean=adjusted_probability_to_vote_for_candidate,
-        std_dev=adjusted_probability_to_vote_for_candidate * 0.1,
-        )
-    actual_probability_to_vote_for_candidate = np.random.beta(alpha, beta, size=1)[0]
+    alpha = calculate_alpha_with_fixed_beta(mean=adjusted_probability_to_vote_for_candidate, beta=2)
+    actual_probability_to_vote_for_candidate = np.random.beta(alpha, 2, size=1)[0]
     votes = np.random.binomial(turnout, actual_probability_to_vote_for_candidate)
 
     return turnout, votes
