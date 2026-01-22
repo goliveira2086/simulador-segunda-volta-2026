@@ -1,4 +1,6 @@
 from matplotlib.pylab import beta
+import seaborn as sns
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -201,10 +203,77 @@ def simulate_second_round(voter_groups, n_simulations=10000):
 def create_scenario(voters_groups, n_simulations=10000):
     results_scenario = simulate_second_round(voters_groups, n_simulations=n_simulations)
     results_scenario_df = pd.DataFrame(
-        results_scenario, columns=["Ventura", "Seguro", "Turnout"]
+        results_scenario, columns=["Ventura", "Seguro", "Votantes"]
     )
-    results_scenario_df["Ventura_Wins"] = (
+    results_scenario_df["Ventura vence!"] = (
         results_scenario_df["Ventura"] > results_scenario_df["Seguro"]
     )
 
     return results_scenario_df
+
+
+def plot_scenario_distribution(scenario_results):
+    """
+    Create a KDE plot showing the distribution of votes for each candidate.
+    
+    Parameters:
+    scenario_results (pd.DataFrame): DataFrame with columns ['Ventura', 'Seguro', 'Turnout']
+    """
+    # Melt the first two columns (candidates) for the plot
+    melted_data = scenario_results[['Ventura', 'Seguro']].melt(
+        var_name='Candidato', 
+        value_name='Votos'
+    )
+    
+    # Convert votes to millions
+    melted_data['Votos'] = melted_data['Votos'] / 1000000
+        
+    # Create the KDE plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.kdeplot(
+        data=melted_data,
+        x='Votos',
+        hue='Candidato',
+        fill=True,
+        common_norm=False,
+        palette='Set2',
+        ax=ax,
+    )
+    
+    plt.title('Distribuição de Votos por Candidato')
+    plt.xlabel('Número de Votos (milhões)')
+    plt.ylabel('Densidade')
+    plt.tight_layout()
+    
+    return fig
+
+def plot_scenario_correlation(scenario_results):
+    """
+    Create a KDE plot showing the correlation between the votes of each candidate.
+    
+    Parameters:
+    scenario_results (pd.DataFrame): DataFrame with columns ['Ventura', 'Seguro', 'Turnout']
+    """
+    # Convert votes to millions
+    for col in ['Ventura', 'Seguro']:
+        scenario_results[col] = scenario_results[col] / 1000000
+
+    scenario_results['Quem vence?'] = scenario_results['Ventura vence!'].map({True: 'Ventura', False: 'Seguro'})
+        
+    # Create the KDE plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.scatterplot(
+        data=scenario_results,
+        x='Ventura',
+        y='Seguro',
+        hue="Quem vence?",
+        palette='Set2',
+        ax=ax,
+    )
+    
+    plt.title('Correlação entre votos dos candidatos em cada simulação')
+    plt.xlabel('Número de votos em Ventura (milhões)')
+    plt.ylabel('Número de votos em Seguro (milhões)')
+    plt.tight_layout()
+    
+    return fig

@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-from modules.voters_functions import create_voter_group, create_scenario
+from modules.voters_functions import create_voter_group, create_scenario, plot_scenario_correlation, plot_scenario_distribution
 
 st.title("Simular Segunda Volta Eleitoral")
 
@@ -95,15 +95,19 @@ if st.sidebar.button("OK", key="run_button"):
 # Only run simulation if OK button was pressed
 if st.session_state.run_simulation:
     scenario_results = create_scenario(voter_groups)
-
+    
     st.header("Resultados da Simulação")
 
     st.subheader("Probabilidade de Ventura Vencer")
-    st.write(f"{scenario_results["Ventura_Wins"].mean() * 100:.2f}%")
+    st.write(f"{scenario_results["Ventura vence!"].mean() * 100:.2f}%")
     
     st.subheader("Votos por Candidato")
-    st.write(scenario_results.describe())
+    fig_1 = plot_scenario_distribution(scenario_results)
+    st.pyplot(fig_1)
 
+    fig_2 = plot_scenario_correlation(scenario_results)
+    st.pyplot(fig_2)
+    
     st.session_state.run_simulation = False
 else:
     st.info("Ajuste os parâmetros e pressione OK para executar a simulação.")
