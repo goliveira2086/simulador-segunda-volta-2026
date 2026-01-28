@@ -8,3 +8,4 @@ black
 black[jupyter]
 flake8
 streamlit
+altair
