@@ -15,7 +15,6 @@ Este dashboard permite explorar cenários possíveis para a segunda volta das el
 - A distribuição de votos de cada candidato.
 
 🛠️ Como usar o simulador
-
 A magia acontece na barra lateral esquerda, onde o utilizador pode definir os parâmetros da simulação. Quando estiver satisfeito com as suas escolhas, basta pressionar o botão "OK" para executar a simulação.
 
 A simulação parte dos o número de pessoas que votaram em cada candidato da primeira volta.
