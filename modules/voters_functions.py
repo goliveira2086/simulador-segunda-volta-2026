@@ -20,8 +20,8 @@ def create_voter_group(
     figueiredo_vote_for_candidate_confidence,
     gouveia_melo_turnout,
     gouveia_melo_turnout_confidence,
-    gouveira_melo_vote_for_candidate,
-    gouveira_melo_vote_for_candidate_confidence,
+    gouveia_melo_vote_for_candidate,
+    gouveia_melo_vote_for_candidate_confidence,
     marques_mendes_turnout,
     marques_mendes_turnout_confidence,
     marques_mendes_vote_for_candidate,
@@ -89,8 +89,8 @@ def create_voter_group(
         "first_turn_votes": 691489 + 3602,
         "probability_to_turnout": gouveia_melo_turnout,
         "probability_to_turnout_confidence": gouveia_melo_turnout_confidence,
-        "probability_to_vote_for_candidate": gouveira_melo_vote_for_candidate,
-        "probability_to_vote_for_candidate_confidence": gouveira_melo_vote_for_candidate_confidence,
+        "probability_to_vote_for_candidate": gouveia_melo_vote_for_candidate,
+        "probability_to_vote_for_candidate_confidence": gouveia_melo_vote_for_candidate_confidence,
     }
     eleitor_portugal_marques_mendes = {
         "first_turn_votes": 631809 + 5585,
@@ -195,14 +195,14 @@ def votes_from_one_group(
     }
         
     # Simulate turnout
-    alpha = probability_to_turnout * confidence_to_k[confidence_to_turnout]
-    beta = (1-probability_to_turnout) * confidence_to_k[confidence_to_turnout]
+    alpha = 0.0001 + probability_to_turnout * confidence_to_k[confidence_to_turnout]
+    beta = 0.0001 + (1-probability_to_turnout) * confidence_to_k[confidence_to_turnout]
     actual_probability_to_turnout = np.random.beta(alpha, beta, size=1)[0]
     turnout = np.random.binomial(nbr_voters_first_turn, actual_probability_to_turnout)
 
     # Simulate votes for the candidate
-    alpha = probability_to_vote_for_candidate * confidence_to_k[confidence_to_vote_for_candidate]
-    beta = (1-probability_to_vote_for_candidate) * confidence_to_k[confidence_to_vote_for_candidate]
+    alpha = 0.0001 + probability_to_vote_for_candidate * confidence_to_k[confidence_to_vote_for_candidate]
+    beta = 0.0001 + (1-probability_to_vote_for_candidate) * confidence_to_k[confidence_to_vote_for_candidate]
     actual_probability_to_vote_for_candidate = np.random.beta(alpha, beta, size=1)[0]
     votes = np.random.binomial(turnout, actual_probability_to_vote_for_candidate)
 
