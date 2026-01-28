@@ -5,7 +5,6 @@ scikit-learn
 seaborn
 openpyxl
 black
-black[jupyter]
 flake8
 streamlit
 altair
