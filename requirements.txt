@@ -7,4 +7,4 @@ openpyxl
 black
 flake8
 streamlit
-altair
+altair==4.2.2
