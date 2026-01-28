@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-from modules.voters_functions import create_voter_group, create_scenario, plot_scenario_correlation, plot_scenario_distribution
+from modules.voters_functions import create_voter_group, create_scenario, plot_scenario_distribution
 
 st.title("Bem vindo ao Simulador da segunda volta das Presidenciais de 2026!")
 
@@ -32,13 +32,12 @@ Além disso, o utilizador pode definir:
 
 📈 Como interpretar os resultados
 - Probabilidade de vitória: percentagem de simulações em que cada candidato vence.
-- Distribuição de votos: mostra a variabilidade possível dada a incerteza introduzida.
+- Distribuição da diferença de votos: mostra a variabilidade possível dada a incerteza introduzida.
 - Impacto dos parâmetros: pequenas alterações nas probabilidades podem gerar grandes mudanças, especialmente quando a confiança é baixa
 
     """
     )
-st.sidebar.header("Parâmetros da Simulação")
-st.text("Ajuste os parâmetros abaixo para simular diferentes cenários eleitorais. Quando estiver pronto, pressione OK.")
+st.sidebar.header("Parâmetros do simulador")
 
 # Initialize session state to track if we should run the simulation
 if "run_simulation" not in st.session_state:
@@ -245,17 +244,14 @@ if st.session_state.run_simulation:
     
     st.header("Resultados da Simulação")
 
-    st.subheader("Probabilidade de Ventura Vencer")
-    st.write(f"{scenario_results["Ventura vence!"].mean() * 100:.2f}%")
+    st.subheader("Probabilidade de cada candidato vencer")
+    st.write(f"Seguro: {(1-scenario_results["Ventura vence!"].mean()) * 100:.2f}%")
+    st.write(f"Ventura: {scenario_results["Ventura vence!"].mean() * 100:.2f}%")
     
-    st.subheader("Votos por Candidato")
+    st.subheader("Diferença de votos por Candidato")
     fig_1 = plot_scenario_distribution(scenario_results)
     st.pyplot(fig_1)
-
-    fig_2 = plot_scenario_correlation(scenario_results)
-    st.pyplot(fig_2)
     
     st.session_state.run_simulation = False
 else:
     st.info("Ajuste os parâmetros e pressione OK para executar a simulação.")
-

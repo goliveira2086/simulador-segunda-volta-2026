@@ -264,68 +264,55 @@ def create_scenario(
 
 def plot_scenario_distribution(scenario_results):
     """
-    Create a KDE plot showing the distribution of votes for each candidate.
+    Create a KDE plot showing the distribution of the difference between Ventura and Seguro votes.
 
     Parameters:
     scenario_results (pd.DataFrame): DataFrame with columns ['Ventura', 'Seguro', 'Turnout']
     """
-    # Melt the first two columns (candidates) for the plot
-    melted_data = scenario_results[["Ventura", "Seguro"]].melt(
-        var_name="Candidato", value_name="Votos"
-    )
-
-    # Convert votes to millions
-    melted_data["Votos"] = melted_data["Votos"] / 1000000
+    # Calculate the difference (Ventura - Seguro)
+    difference = scenario_results["Ventura"] - scenario_results["Seguro"]
+    
+    # Convert to millions
+    difference_millions = difference / 1000000
 
     # Create the KDE plot
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.kdeplot(
-        data=melted_data,
-        x="Votos",
-        hue="Candidato",
+        data=difference_millions,
         fill=True,
-        common_norm=False,
-        palette="Set2",
         ax=ax,
+        color="steelblue"
     )
 
-    plt.title("Distribuição de Votos por Candidato")
-    plt.xlabel("Número de Votos (milhões)")
-    plt.ylabel("Densidade")
-    plt.tight_layout()
+    plt.title("Distribuição da Diferença de Votos")
+    plt.xlabel("Diferença de Votos (milhões)")
+    plt.ylabel("Probabilidade")
+    
+    # Add vertical line at x=0
+    plt.axvline(x=0, color='red', linestyle='--', linewidth=2, label='Diferença = 0')
+    
+    # Get y-axis limits to position text
+    y_max = ax.get_ylim()[1]
+    
+    # Add text annotations
+    ax.text(1, y_max * 0.9, 'Ventura\nmais votos →', 
+        fontsize=10, ha='left', color='green', weight='bold')
+    ax.text(-1, y_max * 0.9, '← Seguro\nmais votos', 
+        fontsize=10, ha='right', color='blue', weight='bold')
 
-    return fig
+    # Ensure symmetric x-limits around zero so 0 is always a tick
+    x_min, x_max = ax.get_xlim()
+    max_abs = max(abs(x_min), abs(x_max))
+    # Set symmetric limits
+    ax.set_xlim(-max_abs, max_abs)
 
+    # Create symmetric ticks (odd number ensures 0 is included)
+    ticks = np.linspace(-max_abs, max_abs, 11)
+    # Display absolute values on the ticks
+    tick_labels = [f'{abs(tick):.1f}' for tick in ticks]
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(tick_labels)
 
-def plot_scenario_correlation(scenario_results):
-    """
-    Create a KDE plot showing the correlation between the votes of each candidate.
-
-    Parameters:
-    scenario_results (pd.DataFrame): DataFrame with columns ['Ventura', 'Seguro', 'Turnout']
-    """
-    # Convert votes to millions
-    for col in ["Ventura", "Seguro"]:
-        scenario_results[col] = scenario_results[col] / 1000000
-
-    scenario_results["Quem vence?"] = scenario_results["Ventura vence!"].map(
-        {True: "Ventura", False: "Seguro"}
-    )
-
-    # Create the KDE plot
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.scatterplot(
-        data=scenario_results,
-        x="Ventura",
-        y="Seguro",
-        hue="Quem vence?",
-        palette="Set2",
-        ax=ax,
-    )
-
-    plt.title("Correlação entre votos dos candidatos em cada simulação")
-    plt.xlabel("Número de votos em Ventura (milhões)")
-    plt.ylabel("Número de votos em Seguro (milhões)")
     plt.tight_layout()
 
     return fig
