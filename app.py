@@ -17,7 +17,7 @@ Este dashboard permite explorar cenários possíveis para a segunda volta das el
 🛠️ Como usar o simulador
 A magia acontece na barra lateral esquerda, onde o utilizador pode definir os parâmetros da simulação. Quando estiver satisfeito com as suas escolhas, basta pressionar o botão "OK" para executar a simulação.
 
-A simulação parte dos o número de pessoas que votaram em cada candidato da primeira volta.
+A simulação parte do número de pessoas que votaram em cada candidato da primeira volta.
 Para cada candidato da primeira volta, o dashboard deixa o utilizador definir:
 - A probabilidade de esses eleitores voltarem a votar na segunda volta.
 - A probabilidade de escolherem André Ventura na segunda volta.
@@ -52,157 +52,157 @@ confidence_to_k = {
 
 voter_groups = create_voter_group(
     seguro_turnout=st.sidebar.slider(
-        "Seguro - Probabilidade de Votação (%)", 0, 100, 100
+        "Eleitor de Seguro - probabilidade de votar (%)", 0, 100, 100
     ),
     seguro_turnout_confidence=st.sidebar.selectbox(
-        "Seguro - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="seguro_turnout_confidence",
     ),
     seguro_vote_for_candidate=st.sidebar.slider(
-        "Seguro - Probabilidade de Votar no Ventura (%)", 0, 100, 0
+        "Eleitor de Seguro - Probabilidade de votar em Ventura (%)", 0, 100, 0
     ),
     seguro_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Seguro - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="seguro_vote_for_candidate_confidence",
     ),
     ventura_turnout=st.sidebar.slider(
-        "Ventura - Probabilidade de Votação (%)", 0, 100, 100
+        "Eleito de Ventura - probabilidade de votar (%)", 0, 100, 100
     ),
     ventura_turnout_confidence=st.sidebar.selectbox(
-        "Ventura - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="ventura_turnout_confidence"
     ),
     ventura_vote_for_candidate=st.sidebar.slider(
-        "Ventura - Probabilidade de Votar no Ventura (%)", 0, 100, 100
+        "Eleitor de ventura - probabilidade de votar em Ventura (%)", 0, 100, 100
     ),
     ventura_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Ventura - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="ventura_vote_for_candidate_confidence"
     ),
     figueiredo_turnout=st.sidebar.slider(
-        "Figueiredo - Probabilidade de Votação (%)", 0, 100, 50
+        "Eleitor de Figueiredo - probabilidade de votar (%)", 0, 100, 50
     ),
     figueiredo_turnout_confidence=st.sidebar.selectbox(
-        "Figueiredo - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="figueiredo_turnout_confidence"
     ),
     figueiredo_vote_for_candidate=st.sidebar.slider(
-        "Figueiredo - Probabilidade de Votar no Ventura (%)", 0, 100, 100
+        "Eleitor de Figueiredo - probabilidade de votar em Ventura (%)", 0, 100, 100
     ),
     figueiredo_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Figueiredo - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="figueiredo_vote_for_candidate_confidence"
     ),
     gouveia_melo_turnout=st.sidebar.slider(
-        "Gouveia Melo - Probabilidade de Votação (%)", 0, 100, 100
+        "Eleitor de Gouveia Melo - probabilidade de votar (%)", 0, 100, 100
     ),
     gouveia_melo_turnout_confidence=st.sidebar.selectbox(
-        "Gouveia Melo - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="gouveia_melo_turnout_confidence"
     ),
     gouveia_melo_vote_for_candidate=st.sidebar.slider(
-        "Gouveia Melo - Probabilidade de Votar no Ventura (%)", 0, 100, 50
+        "Eleitor de Gouveia Melo - probabilidade de votar em Ventura (%)", 0, 100, 50
     ),
     gouveia_melo_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Gouveia Melo - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="gouveia_melo_vote_for_candidate_confidence"
     ),
     marques_mendes_turnout=st.sidebar.slider(
-        "Marques Mendes - Probabilidade de Votação (%)", 0, 100, 100
+        "Eleitor deMarques Mendes - probabilidade de votar (%)", 0, 100, 100
     ),
     marques_mendes_turnout_confidence=st.sidebar.selectbox(
-        "Marques Mendes - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="marques_mendes_turnout_confidence"
     ),
     marques_mendes_vote_for_candidate=st.sidebar.slider(
-        "Marques Mendes - Probabilidade de Votar no Ventura (%)", 0, 100, 50
+        "Eleitor de Marques Mendes - probabilidade de votar em Ventura (%)", 0, 100, 50
     ),
     marques_mendes_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Marques Mendes - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="marques_mendes_vote_for_candidate_confidence"
     ),
     martins_turnout=st.sidebar.slider(
-        "Martins - Probabilidade de Votação (%)", 0, 100, 100
+        "Eleitor de Catarina Martins - probabilidade de votar (%)", 0, 100, 100
     ),
     martins_turnout_confidence=st.sidebar.selectbox(
-        "Martins - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="martins_turnout_confidence"
     ),
     martins_vote_for_candidate=st.sidebar.slider(
-        "Martins - Probabilidade de Votar no Ventura (%)", 0, 100, 0
+        "Eleitor de Catarina Martins - probabilidade de votar em Ventura (%)", 0, 100, 0
     ),
     martins_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Martins - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="martins_vote_for_candidate_confidence"
     ),
     filipe_turnout=st.sidebar.slider(
-        "Filipe - Probabilidade de Votação (%)",  0, 100, 100
+        "Eleitor de Filipe - probabilidade de votar (%)",  0, 100, 100
     ),
     filipe_turnout_confidence=st.sidebar.selectbox(
-        "Filipe - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="filipe_turnout_confidence"
     ),
     filipe_vote_for_candidate=st.sidebar.slider(
-        "Filipe - Probabilidade de Votar no Ventura (%)", 0, 100, 0
+        "Eleitor de Filipe - probabilidade de votar em Ventura (%)", 0, 100, 0
     ),
     filipe_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Filipe - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="filipe_vote_for_candidate_confidence"
     ),
     vieira_turnout=st.sidebar.slider(
-        "Vieira - Probabilidade de Votação (%)", 0, 100, 100
+        "Eleitor de Vieira - probabilidade de votar (%)", 0, 100, 100
     ),
     vieira_turnout_confidence=st.sidebar.selectbox(
-        "Vieira - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="vieira_turnout_confidence"
     ),
     vieira_vote_for_candidate=st.sidebar.slider(
-        "Vieira - Probabilidade de Votar no Ventura (%)", 0, 100, 50
+        "Eleitor de Vieira - probabilidade de votar em Ventura (%)", 0, 100, 50
     ),
     vieira_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Vieira - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="vieira_vote_for_candidate_confidence"
     ),
     pinto_vote_turnout=st.sidebar.slider(
-        "Pinto - Probabilidade de Votação (%)", 0, 100, 100
+        "Eleitor de Pinto - probabilidade de votar (%)", 0, 100, 100
     ),
     pinto_turnout_confidence=st.sidebar.selectbox(
-        "Pinto - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="pinto_turnout_confidence"
     ),
     pinto_vote_for_candidate=st.sidebar.slider(
-        "Pinto - Probabilidade de Votar no Ventura (%)", 0, 100, 50
+        "Eleitor de Pinto - probabilidade de votar em Ventura (%)", 0, 100, 50
     ),
     pinto_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Pinto - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="pinto_vote_for_candidate_confidence"
     ),
     silva_turnout=st.sidebar.slider(
-        "Silva - Probabilidade de Votação (%)",  0, 100, 100
+        "Eleitor de Silva - probabilidade de votar (%)",  0, 100, 100
     ),
     silva_turnout_confidence=st.sidebar.selectbox(
-        "Silva - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="silva_turnout_confidence"
     ),
     silva_vote_for_candidate=st.sidebar.slider(
-        "Silva - Probabilidade de Votar no Ventura (%)",  0, 100, 100
+        "Eleitor de Silva - probabilidade de votar em Ventura (%)",  0, 100, 100
     ),
     silva_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Silva - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="silva_vote_for_candidate_confidence"
     ),
     correia_turnout=st.sidebar.slider(
-        "Correia - Probabilidade de Votação (%)",  0, 100, 100
+        "Eleitor de Correia - probabilidade de votar (%)",  0, 100, 100
     ),
     correia_turnout_confidence=st.sidebar.selectbox(
-        "Correia - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="correia_turnout_confidence"
     ),
     correia_vote_for_candidate=st.sidebar.slider(
-        "Correia - Probabilidade de Votar no Ventura (%)",  0, 100, 50
+        "Eleitor de Correia - probabilidade de votar em Ventura (%)",  0, 100, 50
     ),
     correia_vote_for_candidate_confidence=st.sidebar.selectbox(
-        "Correia - Está confiante nesta probabilidade?",
+        "Está confiante nesta probabilidade?",
         list(confidence_to_k.keys()), key="correia_vote_for_candidate_confidence"
     ),
     abstentionist_turnout=st.sidebar.slider(
